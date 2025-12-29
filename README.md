@@ -5,6 +5,7 @@ A full-stack Todo application built with MongoDB, Express.js, React, and Node.js
 ## Features
 
 ### Core Features
+
 - ✅ Create, read, update, and delete todos
 - ✅ Mark todos as complete/incomplete
 - ✅ Edit todos inline
@@ -13,6 +14,7 @@ A full-stack Todo application built with MongoDB, Express.js, React, and Node.js
 - ✅ RESTful API backend
 
 ### Advanced Features
+
 - 🎯 **Priority Levels** - Set todos as High, Medium, or Low priority
 - 📅 **Due Dates** - Add due dates to todos with overdue indicators
 - 🏷️ **Categories** - Organize todos with custom categories
@@ -76,6 +78,7 @@ MONGODB_URI=mongodb://localhost:27017/mern-todos
 ```
 
 For MongoDB Atlas, use:
+
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mern-todos
 ```
@@ -85,6 +88,7 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mern-todos
 Make sure MongoDB is running on your system. If using MongoDB locally:
 
 **Windows:**
+
 ```bash
 # MongoDB should start automatically as a service
 # Or start it manually:
@@ -92,11 +96,13 @@ mongod
 ```
 
 **macOS:**
+
 ```bash
 brew services start mongodb-community
 ```
 
 **Linux:**
+
 ```bash
 sudo systemctl start mongod
 ```
@@ -104,6 +110,7 @@ sudo systemctl start mongod
 ### 5. Run the Application
 
 **Terminal 1 - Start Backend:**
+
 ```bash
 cd backend
 npm run dev
@@ -112,6 +119,7 @@ npm run dev
 The backend server will run on `http://localhost:5000`
 
 **Terminal 2 - Start Frontend:**
+
 ```bash
 cd frontend
 npm start
@@ -122,6 +130,7 @@ The frontend will open automatically at `http://localhost:3000`
 ## API Endpoints
 
 ### Todo Endpoints
+
 - `GET /api/todos` - Get all todos (supports query params: `filter`, `sortBy`, `search`)
 - `GET /api/todos/:id` - Get a single todo
 - `POST /api/todos` - Create a new todo
@@ -129,12 +138,15 @@ The frontend will open automatically at `http://localhost:3000`
 - `DELETE /api/todos/:id` - Delete a todo
 
 ### Statistics Endpoint
+
 - `GET /api/todos/stats/summary` - Get todo statistics
 
 ### Health Check
+
 - `GET /api/health` - Health check
 
 ### Query Parameters
+
 - `filter`: `all`, `active`, `completed`
 - `sortBy`: `date`, `priority`, `dueDate`, `title`
 - `search`: Search term for title, description, or category
@@ -142,6 +154,7 @@ The frontend will open automatically at `http://localhost:3000`
 ## Technologies Used
 
 ### Backend
+
 - **Node.js** - JavaScript runtime
 - **Express.js** - Web framework
 - **MongoDB** - Database
@@ -150,6 +163,7 @@ The frontend will open automatically at `http://localhost:3000`
 - **dotenv** - Environment variable management
 
 ### Frontend
+
 - **React** - UI library
 - **Axios** - HTTP client
 - **CSS3** - Styling
@@ -157,10 +171,12 @@ The frontend will open automatically at `http://localhost:3000`
 ## Development
 
 ### Backend Scripts
+
 - `npm start` - Start production server
 - `npm run dev` - Start development server with nodemon
 
 ### Frontend Scripts
+
 - `npm start` - Start development server
 - `npm run build` - Build for production
 - `npm test` - Run tests
@@ -168,11 +184,13 @@ The frontend will open automatically at `http://localhost:3000`
 ## Troubleshooting
 
 1. **MongoDB Connection Error**
+
    - Ensure MongoDB is running
    - Check your `MONGODB_URI` in `.env`
    - Verify MongoDB port (default: 27017)
 
 2. **Port Already in Use**
+
    - Change `PORT` in backend `.env`
    - Or kill the process using the port
 
@@ -180,7 +198,25 @@ The frontend will open automatically at `http://localhost:3000`
    - Ensure backend CORS is configured
    - Check that API URL matches backend port
 
+## Deployment
+
+### ⭐ Recommended Platform: Render (Backend) + Vercel (Frontend)
+
+**Best for:** Ease of use, reliability, and free tier
+
+**Quick Start:**
+
+1. Set up MongoDB Atlas (free)
+2. Deploy backend to [Render.com](https://render.com)
+3. Deploy frontend to [Vercel.com](https://vercel.com)
+4. Update environment variables
+
+**📖 Guides:**
+
+- **[BEST_DEPLOYMENT.md](./BEST_DEPLOYMENT.md)** - ⭐ Step-by-step guide (recommended)
+- [QUICK_DEPLOY.md](./QUICK_DEPLOY.md) - Quick reference
+- [DEPLOYMENT.md](./DEPLOYMENT.md) - Complete guide with all options
+
 ## License
 
 ISC
-
