@@ -28,10 +28,7 @@ app.get('/api/health', (req, res) => {
 
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mern-todos', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mern-todos')
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => {
