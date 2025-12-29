@@ -19,6 +19,9 @@ frontend/.env.production
 frontend/.env.development.local
 frontend/.env.test.local
 
+# Security: Never commit real credentials
+# Always use placeholders in documentation: <username>, <password>
+
 # Build outputs
 frontend/build/
 frontend/dist/
