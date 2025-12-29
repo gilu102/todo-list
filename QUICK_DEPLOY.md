@@ -64,10 +64,11 @@
 
 ### Backend:
 ```
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/mern-todos
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos
 FRONTEND_URL=https://your-app.vercel.app
 NODE_ENV=production
 ```
+⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
 ### Frontend:
 ```

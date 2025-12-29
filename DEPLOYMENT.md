@@ -32,7 +32,8 @@ This guide will help you deploy your MERN Todo App to production.
    - Choose "Connect your application"
    - Copy the connection string
    - Replace `<password>` with your database user password
-   - Example: `mongodb+srv://username:password@cluster.mongodb.net/mern-todos?retryWrites=true&w=majority`
+   - Format: `mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos?retryWrites=true&w=majority`
+   - ⚠️ **Replace** `<username>` and `<password>` with your actual credentials
 
 ---
 
@@ -252,10 +253,11 @@ netlify deploy --prod --dir=build
 ### Backend (.env):
 ```
 PORT=5000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mern-todos
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos
 FRONTEND_URL=https://your-frontend.vercel.app
 NODE_ENV=production
 ```
+⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
 ### Frontend (.env.production):
 ```

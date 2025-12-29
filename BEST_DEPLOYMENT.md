@@ -52,10 +52,11 @@ This is the **easiest and most reliable** combination for MERN stack apps.
    - Copy the connection string
    - Replace `<password>` with your database user password
    - Replace `<dbname>` with `mern-todos` (or your choice)
-   - **Save this string!** Example:
+   - **Save this string!** Format:
      ```
-     mongodb+srv://mernuser:YourPassword123@cluster0.xxxxx.mongodb.net/mern-todos?retryWrites=true&w=majority
+     mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/<dbname>?retryWrites=true&w=majority
      ```
+     ⚠️ **Replace** `<username>`, `<password>`, and `<dbname>` with your actual values
 
 ---
 
@@ -113,8 +114,9 @@ This is the **easiest and most reliable** combination for MERN stack apps.
    Click "Advanced" → "Add Environment Variable":
 
    ```
-   MONGODB_URI = mongodb+srv://mernuser:YourPassword@cluster0.xxxxx.mongodb.net/mern-todos?retryWrites=true&w=majority
+   MONGODB_URI = mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mern-todos?retryWrites=true&w=majority
    ```
+   ⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
    ```
    NODE_ENV = production
@@ -204,10 +206,11 @@ This is the **easiest and most reliable** combination for MERN stack apps.
 **Render (Backend):**
 
 ```
-MONGODB_URI = mongodb+srv://user:pass@cluster.mongodb.net/mern-todos
+MONGODB_URI = mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos
 FRONTEND_URL = https://your-app.vercel.app
 NODE_ENV = production
 ```
+⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
 **Vercel (Frontend):**
 

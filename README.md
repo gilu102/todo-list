@@ -80,8 +80,9 @@ MONGODB_URI=mongodb://localhost:27017/mern-todos
 For MongoDB Atlas, use:
 
 ```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mern-todos
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos
 ```
+⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
 ### 4. Start MongoDB
 
