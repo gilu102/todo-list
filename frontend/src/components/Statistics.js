@@ -15,7 +15,6 @@ const Statistics = () => {
 
   useEffect(() => {
     fetchStats();
-    // Refresh stats every 5 seconds
     const interval = setInterval(fetchStats, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -25,7 +24,7 @@ const Statistics = () => {
       const response = await axios.get(`${API_URL}/todos/stats/summary`);
       setStats(response.data);
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      // Error handling
     }
   };
 

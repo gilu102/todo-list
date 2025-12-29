@@ -38,7 +38,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to fetch todos. Make sure the backend server is running.');
-      console.error('Error fetching todos:', err);
     } finally {
       setLoading(false);
     }
@@ -66,7 +65,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to add todo.');
-      console.error('Error adding todo:', err);
     }
   };
 
@@ -77,7 +75,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to update todo.');
-      console.error('Error updating todo:', err);
     }
   };
 
@@ -88,7 +85,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to delete todo.');
-      console.error('Error deleting todo:', err);
     }
   };
 

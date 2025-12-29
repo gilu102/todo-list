@@ -3,13 +3,11 @@ import Todo from '../models/Todo.js';
 
 const router = express.Router();
 
-// Get all todos with filtering and sorting
 router.get('/', async (req, res) => {
   try {
     const { filter, sortBy, search } = req.query;
     let query = {};
 
-    // Search functionality
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
@@ -18,17 +16,15 @@ router.get('/', async (req, res) => {
       ];
     }
 
-    // Filter by completion status
     if (filter === 'completed') {
       query.completed = true;
     } else if (filter === 'active') {
       query.completed = false;
     }
 
-    // Sorting
     let sortOption = { createdAt: -1 };
     if (sortBy === 'priority') {
-      sortOption = { priority: -1, createdAt: -1 }; // high, medium, low
+      sortOption = { priority: -1, createdAt: -1 };
     } else if (sortBy === 'dueDate') {
       sortOption = { dueDate: 1, createdAt: -1 };
     } else if (sortBy === 'title') {
@@ -42,70 +38,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a single todo
-router.get('/:id', async (req, res) => {
-  try {
-    const todo = await Todo.findById(req.params.id);
-    if (!todo) {
-      return res.status(404).json({ message: 'Todo not found' });
-    }
-    res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Create a new todo
-router.post('/', async (req, res) => {
-  try {
-    const { title, description, completed, priority, dueDate, category } = req.body;
-    const todo = new Todo({
-      title,
-      description,
-      completed: completed || false,
-      priority: priority || 'medium',
-      dueDate: dueDate || null,
-      category: category || 'general',
-    });
-    const savedTodo = await todo.save();
-    res.status(201).json(savedTodo);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Update a todo
-router.put('/:id', async (req, res) => {
-  try {
-    const { title, description, completed, priority, dueDate, category } = req.body;
-    const todo = await Todo.findByIdAndUpdate(
-      req.params.id,
-      { title, description, completed, priority, dueDate, category },
-      { new: true, runValidators: true }
-    );
-    if (!todo) {
-      return res.status(404).json({ message: 'Todo not found' });
-    }
-    res.json(todo);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Delete a todo
-router.delete('/:id', async (req, res) => {
-  try {
-    const todo = await Todo.findByIdAndDelete(req.params.id);
-    if (!todo) {
-      return res.status(404).json({ message: 'Todo not found' });
-    }
-    res.json({ message: 'Todo deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get statistics
 router.get('/stats/summary', async (req, res) => {
   try {
     const total = await Todo.countDocuments();
@@ -124,6 +56,65 @@ router.get('/stats/summary', async (req, res) => {
       highPriority,
       overdue,
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.json(todo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const { title, description, completed, priority, dueDate, category } = req.body;
+    const todo = new Todo({
+      title,
+      description,
+      completed: completed || false,
+      priority: priority || 'medium',
+      dueDate: dueDate || null,
+      category: category || 'general',
+    });
+    const savedTodo = await todo.save();
+    res.status(201).json(savedTodo);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const { title, description, completed, priority, dueDate, category } = req.body;
+    const todo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { title, description, completed, priority, dueDate, category },
+      { new: true, runValidators: true }
+    );
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.json(todo);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndDelete(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    res.json({ message: 'Todo deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

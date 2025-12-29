@@ -98,6 +98,7 @@ This is the **easiest and most reliable** combination for MERN stack apps.
    - Click "New" → "Web Service"
    - Connect your GitHub account (if not already)
    - Select your repository: `mern-todo-app`
+   - ⚠️ **IMPORTANT:** Your repository must be **PUBLIC** for free tier
    - Click "Connect"
 
 3. **Configure Service:**
@@ -105,10 +106,15 @@ This is the **easiest and most reliable** combination for MERN stack apps.
    - **Name:** `mern-todo-backend` (or your choice)
    - **Region:** Choose closest to you
    - **Branch:** `main`
-   - **Root Directory:** `backend` ⚠️ **IMPORTANT!**
+   - **Root Directory:** `backend` ⚠️ **CRITICAL!** (This tells Render to only deploy the backend folder)
    - **Runtime:** `Node`
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
+   - **Plan/Instance Type:** ⚠️ **SELECT "FREE"** (not Starter/Standard/Pro)
+     - Look for "Plan" dropdown or "Instance Type" section
+     - Make sure it says **"Free"** - this is critical!
+     - If you don't see "Free" option, make sure your repo is **PUBLIC**
+     - ⚠️ **If Root Directory is wrong, Render tries to deploy entire repo and may require paid plan!**
 
 4. **Add Environment Variables:**
    Click "Advanced" → "Add Environment Variable":
