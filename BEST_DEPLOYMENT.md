@@ -116,6 +116,7 @@ This is the **easiest and most reliable** combination for MERN stack apps.
    ```
    MONGODB_URI = mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mern-todos?retryWrites=true&w=majority
    ```
+
    ⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
    ```
@@ -210,6 +211,7 @@ MONGODB_URI = mongodb+srv://<username>:<password>@cluster.mongodb.net/mern-todos
 FRONTEND_URL = https://your-app.vercel.app
 NODE_ENV = production
 ```
+
 ⚠️ **Replace** `<username>` and `<password>` with your actual MongoDB Atlas credentials
 
 **Vercel (Frontend):**
