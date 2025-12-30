@@ -29,6 +29,15 @@ const todoSchema = new mongoose.Schema(
       trim: true,
       default: 'general',
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TodoItem.css';
 
-const TodoItem = ({ todo, onUpdate, onDelete }) => {
+const TodoItem = ({ todo, onUpdate, onDelete, currentUserId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description || '');
@@ -141,24 +141,34 @@ const TodoItem = ({ todo, onUpdate, onDelete }) => {
                     {isOverdue() && ' ⚠️ Overdue'}
                   </span>
                 )}
+                {todo.userId && (
+                  <span className="todo-owner">
+                    {typeof todo.userId === 'object' ? `👤 ${todo.userId.username}` : ''}
+                    {todo.isPublic ? ' 🌐 Public' : ' 🔒 Private'}
+                  </span>
+                )}
               </div>
             </div>
           </div>
           <div className="todo-actions">
-            <button
-              onClick={() => setIsEditing(true)}
-              className="edit-btn"
-              title="Edit"
-            >
-              ✏️
-            </button>
-            <button
-              onClick={() => onDelete(todo._id)}
-              className="delete-btn"
-              title="Delete"
-            >
-              🗑️
-            </button>
+            {(currentUserId && (typeof todo.userId === 'object' ? todo.userId._id : todo.userId) === currentUserId) && (
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="edit-btn"
+                  title="Edit"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => onDelete(todo._id)}
+                  className="delete-btn"
+                  title="Delete"
+                >
+                  🗑️
+                </button>
+              </>
+            )}
           </div>
         </>
       )}

@@ -1,19 +1,43 @@
 import express from 'express';
 import Todo from '../models/Todo.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
-    const { filter, sortBy, search } = req.query;
+    const { filter, sortBy, search, listType } = req.query;
     let query = {};
 
-    if (search) {
+    if (listType === 'personal') {
+      query.userId = req.user._id;
+    } else if (listType === 'public') {
+      query.isPublic = true;
+    } else {
       query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-        { category: { $regex: search, $options: 'i' } },
+        { userId: req.user._id },
+        { isPublic: true },
       ];
+    }
+
+    if (search) {
+      const searchQuery = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+          { category: { $regex: search, $options: 'i' } },
+        ],
+      };
+      
+      if (query.$or) {
+        query.$and = [
+          { $or: query.$or },
+          searchQuery,
+        ];
+        delete query.$or;
+      } else {
+        Object.assign(query, searchQuery);
+      }
     }
 
     if (filter === 'completed') {
@@ -31,20 +55,37 @@ router.get('/', async (req, res) => {
       sortOption = { title: 1 };
     }
 
-    const todos = await Todo.find(query).sort(sortOption);
+    const todos = await Todo.find(query)
+      .populate('userId', 'username')
+      .sort(sortOption);
     res.json(todos);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/stats/summary', async (req, res) => {
+router.get('/stats/summary', authenticate, async (req, res) => {
   try {
-    const total = await Todo.countDocuments();
-    const completed = await Todo.countDocuments({ completed: true });
-    const active = await Todo.countDocuments({ completed: false });
-    const highPriority = await Todo.countDocuments({ priority: 'high', completed: false });
+    const { listType } = req.query;
+    let query = {};
+
+    if (listType === 'personal') {
+      query.userId = req.user._id;
+    } else if (listType === 'public') {
+      query.isPublic = true;
+    } else {
+      query.$or = [
+        { userId: req.user._id },
+        { isPublic: true },
+      ];
+    }
+
+    const total = await Todo.countDocuments(query);
+    const completed = await Todo.countDocuments({ ...query, completed: true });
+    const active = await Todo.countDocuments({ ...query, completed: false });
+    const highPriority = await Todo.countDocuments({ ...query, priority: 'high', completed: false });
     const overdue = await Todo.countDocuments({
+      ...query,
       dueDate: { $lt: new Date() },
       completed: false,
     });
@@ -61,11 +102,14 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
+    const todo = await Todo.findById(req.params.id).populate('userId', 'username');
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
+    }
+    if (!todo.isPublic && todo.userId._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
     }
     res.json(todo);
   } catch (error) {
@@ -73,9 +117,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
-    const { title, description, completed, priority, dueDate, category } = req.body;
+    const { title, description, completed, priority, dueDate, category, isPublic } = req.body;
     const todo = new Todo({
       title,
       description,
@@ -83,37 +127,49 @@ router.post('/', async (req, res) => {
       priority: priority || 'medium',
       dueDate: dueDate || null,
       category: category || 'general',
+      userId: req.user._id,
+      isPublic: isPublic || false,
     });
     const savedTodo = await todo.save();
+    await savedTodo.populate('userId', 'username');
     res.status(201).json(savedTodo);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
-    const { title, description, completed, priority, dueDate, category } = req.body;
-    const todo = await Todo.findByIdAndUpdate(
-      req.params.id,
-      { title, description, completed, priority, dueDate, category },
-      { new: true, runValidators: true }
-    );
+    const todo = await Todo.findById(req.params.id);
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    res.json(todo);
+    if (todo.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const { title, description, completed, priority, dueDate, category, isPublic } = req.body;
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { title, description, completed, priority, dueDate, category, isPublic },
+      { new: true, runValidators: true }
+    ).populate('userId', 'username');
+    res.json(updatedTodo);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
-    const todo = await Todo.findByIdAndDelete(req.params.id);
+    const todo = await Todo.findById(req.params.id);
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
+    if (todo.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+    await Todo.findByIdAndDelete(req.params.id);
     res.json({ message: 'Todo deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

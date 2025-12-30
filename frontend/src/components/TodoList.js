@@ -2,7 +2,7 @@ import React from 'react';
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
-const TodoList = ({ todos, onUpdate, onDelete }) => {
+const TodoList = ({ todos, onUpdate, onDelete, currentUserId }) => {
   if (todos.length === 0) {
     return (
       <div className="empty-state">
@@ -19,6 +19,7 @@ const TodoList = ({ todos, onUpdate, onDelete }) => {
           todo={todo}
           onUpdate={onUpdate}
           onDelete={onDelete}
+          currentUserId={currentUserId}
         />
       ))}
     </div>

@@ -4,7 +4,7 @@ import './Statistics.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-const Statistics = () => {
+const Statistics = ({ listType = 'all' }) => {
   const [stats, setStats] = useState({
     total: 0,
     completed: 0,
@@ -17,11 +17,13 @@ const Statistics = () => {
     fetchStats();
     const interval = setInterval(fetchStats, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [listType]);
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API_URL}/todos/stats/summary`);
+      const params = new URLSearchParams();
+      if (listType !== 'all') params.append('listType', listType);
+      const response = await axios.get(`${API_URL}/todos/stats/summary?${params.toString()}`);
       setStats(response.data);
     } catch (error) {
       // Error handling

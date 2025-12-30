@@ -7,6 +7,7 @@ const TodoForm = ({ onAdd }) => {
   const [priority, setPriority] = useState('medium');
   const [dueDate, setDueDate] = useState('');
   const [category, setCategory] = useState('general');
+  const [isPublic, setIsPublic] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,12 +19,14 @@ const TodoForm = ({ onAdd }) => {
         priority,
         dueDate: dueDate || null,
         category: category.trim() || 'general',
+        isPublic,
       });
       setTitle('');
       setDescription('');
       setPriority('medium');
       setDueDate('');
       setCategory('general');
+      setIsPublic(false);
     }
   };
 
@@ -83,6 +86,19 @@ const TodoForm = ({ onAdd }) => {
             onChange={(e) => setCategory(e.target.value)}
             className="form-input"
           />
+        </div>
+      </div>
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-checkbox-label">
+            <input
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="form-checkbox"
+            />
+            Make this todo public
+          </label>
         </div>
       </div>
       <button type="submit" className="submit-btn">
