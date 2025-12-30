@@ -143,7 +143,7 @@ const TodoItem = ({ todo, onUpdate, onDelete, currentUserId }) => {
                 )}
                 {todo.userId && (
                   <span className="todo-owner">
-                    {typeof todo.userId === 'object' ? `👤 ${todo.userId.username}` : ''}
+                    {typeof todo.userId === 'object' && todo.userId && todo.userId.username ? `👤 ${todo.userId.username}` : ''}
                     {todo.isPublic ? ' 🌐 Public' : ' 🔒 Private'}
                   </span>
                 )}
@@ -151,7 +151,12 @@ const TodoItem = ({ todo, onUpdate, onDelete, currentUserId }) => {
             </div>
           </div>
           <div className="todo-actions">
-            {(currentUserId && (typeof todo.userId === 'object' ? todo.userId._id : todo.userId) === currentUserId) && (
+            {currentUserId && todo.userId && (() => {
+              const userId = typeof todo.userId === 'object' 
+                ? (todo.userId && todo.userId._id ? todo.userId._id.toString() : null)
+                : (todo.userId ? todo.userId.toString() : null);
+              return userId === currentUserId;
+            })() && (
               <>
                 <button
                   onClick={() => setIsEditing(true)}
