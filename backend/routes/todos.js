@@ -108,8 +108,16 @@ router.get('/:id', authenticate, async (req, res) => {
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    if (!todo.isPublic && todo.userId._id.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized' });
+    if (!todo.isPublic) {
+      if (!todo.userId) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
+      const todoUserId = typeof todo.userId === 'object' && todo.userId._id 
+        ? todo.userId._id.toString() 
+        : todo.userId.toString();
+      if (todoUserId !== req.user._id.toString()) {
+        return res.status(403).json({ message: 'Not authorized' });
+      }
     }
     res.json(todo);
   } catch (error) {
@@ -144,7 +152,11 @@ router.put('/:id', authenticate, async (req, res) => {
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    if (todo.userId.toString() !== req.user._id.toString()) {
+    if (!todo.userId) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+    const todoUserId = todo.userId.toString();
+    if (todoUserId !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
@@ -166,7 +178,11 @@ router.delete('/:id', authenticate, async (req, res) => {
     if (!todo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
-    if (todo.userId.toString() !== req.user._id.toString()) {
+    if (!todo.userId) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+    const todoUserId = todo.userId.toString();
+    if (todoUserId !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Not authorized' });
     }
     await Todo.findByIdAndDelete(req.params.id);
