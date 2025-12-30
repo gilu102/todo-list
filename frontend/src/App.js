@@ -7,6 +7,7 @@ import Statistics from './components/Statistics';
 import Auth from './components/Auth';
 import Chat from './components/Chat';
 import UsersList from './components/UsersList';
+import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import axios from 'axios';
 
@@ -220,6 +221,8 @@ function App() {
             />
           </div>
         )}
+
+        <Footer />
       </div>
     </div>
   );
